@@ -1,0 +1,37 @@
+import { Injectable, NgZone, Inject } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { grpc, Code, Metadata } from "grpc-web-client";
+
+import { {{{import_symbol}}} as __service } from "{{{import_path}}}";
+{{#message_imports}}
+import { {{{symbol}}} } from "{{{path}}}";
+{{/message_imports}}
+
+@Injectable()
+export class {{name}}Service {
+
+	{{#methods}}
+	{{name}}(request: {{{inputType}}}): {{{returnType}}} {
+
+		{{{returnTypeCtor}}};
+
+		grpc.invoke(<any> __service.service, <any> {
+			request: request,
+			onMessage: (response: {{{outputType}}}) => {
+				next(response);
+			},
+			onEnd: (code: Code, msg: undefined | string, metadata: Metadata) => {
+				if(code != Code.OK) {
+					error({code, msg, metadata});
+				} else {
+					done({code, msg, metadata});
+				}
+			}
+		});
+
+		return ret;
+	}
+
+	{{/methods}}
+}

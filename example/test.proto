@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+message HelloRequest {
+	string msg = 1;
+}
+
+message HelloResponse {
+
+}
+
+service Hello {
+	rpc ping(HelloRequest) returns(HelloResponse) {};
+	rpc pingStream(HelloRequest) returns(stream HelloResponse) {};
+}
