@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/zaucy/protoc-gen-ngx#readme",
   "dependencies": {
+    "@angular/compiler": "^5.1.0",
+    "@angular/compiler-cli": "^5.1.0",
     "mustache": "^2.3.0",
     "protoc-plugin": "0.0.6"
   }

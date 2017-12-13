@@ -22,7 +22,7 @@ protocPlugin(protos => {
 			let serviceImportPath = "./" + service.name.toLowerCase() + "_pb_service";
 			let serviceMessageImports = {};
 
-			console.error(service.methodList);
+			// console.error(service.methodList);
 
 			service.methodList.forEach(method => {
 				let outputType = method.outputType.substr(1);
@@ -65,7 +65,7 @@ protocPlugin(protos => {
 							serverStreaming: method.serverStreaming,
 						};
 
-						console.error(methodDefinition);
+						// console.error(methodDefinition);
 
 						return methodDefinition;
 					})
@@ -73,14 +73,14 @@ protocPlugin(protos => {
 			};
 		}));
 
-		files = files.concat(proto.messageTypeList.map(messageType => {
-			let messageFilename = messageType.name + '.ts';
-			return {
-				messageFilename
-			};
-		}));
+		// files = files.concat(proto.messageTypeList.map(messageType => {
+		// 	let messageFilename = messageType.name + '.ts';
+		// 	return {
+		// 		messageFilename
+		// 	};
+		// }));
 
-		// console.error(files);
+		// console.error(files.map(file => file.name));
 
 		return files;
 	}, []);
