@@ -1,5 +1,5 @@
 {
-  "name": "ngx-protoc-plugin",
+  "name": "protoc-gen-ngx",
   "version": "0.0.1",
   "bin": "src/cli.js",
   "description": "Angular service and message refs protoc plugin generator",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zaucy/ngx-protoc-plugin.git"
+    "url": "git+https://github.com/zaucy/protoc-gen-ngx.git"
   },
   "author": "Ezekiel Warren",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zaucy/ngx-protoc-plugin/issues"
+    "url": "https://github.com/zaucy/protoc-gen-ngx/issues"
   },
-  "homepage": "https://github.com/zaucy/ngx-protoc-plugin#readme",
+  "homepage": "https://github.com/zaucy/protoc-gen-ngx#readme",
   "dependencies": {
     "mustache": "^2.3.0",
     "protoc-plugin": "0.0.6"
