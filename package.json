@@ -1,6 +1,6 @@
 {
   "name": "protoc-gen-ngx",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "bin": "src/cli.js",
   "description": "Angular service and message refs protoc plugin generator",
   "main": "src/main.js",

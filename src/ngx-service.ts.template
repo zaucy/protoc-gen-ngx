@@ -1,3 +1,5 @@
+// GENERATED -- DO NOT EDIT
+
 import { Injectable, NgZone, Inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -9,15 +11,16 @@ import { {{{symbol}}} } from "{{{path}}}";
 {{/message_imports}}
 
 @Injectable()
-export class {{name}}Service {
+export class {{name}} {
 
 	{{#methods}}
 	{{name}}(request: {{{inputType}}}): {{{returnType}}} {
 
 		{{{returnTypeCtor}}};
 
-		grpc.invoke(<any> __service.service, <any> {
+		grpc.invoke(<any> __service.{{{name}}}, <any> {
 			request: request,
+			host: "https://" + location.hostname + ":8443",
 			onMessage: (response: {{{outputType}}}) => {
 				next(response);
 			},

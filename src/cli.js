@@ -6,23 +6,28 @@ const fs = require("fs");
 
 const NGX_SERVICE_TEMPLATE = path.resolve(__dirname, "ngx-service.ts.template");
 
-protocPlugin(protos => {
+protocPlugin((protos, opts) => {
 	// do stuff here with protos
 	// return array like [{name: 'filename', content: 'CONTENTS'}]
-
-	// console.error(protos[0]);
 
 	const serviceTemplateSrc = fs.readFileSync(NGX_SERVICE_TEMPLATE, 'utf8');
 
 	return protos.reduce((files, proto) => {
 
+		let protoServiceImport = "./_grpc-gen_web_out/" +
+			path.basename(proto.name, ".proto") + "_pb_service";
+		let protoImport = "./_grpc-gen_web_out/" +
+			path.basename(proto.name, ".proto") + "_pb";
+
+		// console.log("protoImport:", protoImport);
+
 		files = files.concat(proto.serviceList.map(service => {
 
 			let serviceImportSymbol = service.name;
-			let serviceImportPath = "./" + service.name.toLowerCase() + "_pb_service";
+			// let serviceImportPath = "./" + service.name.toLowerCase() + "_pb_service";
+			let serviceImportPath = protoServiceImport;
 			let serviceMessageImports = {};
 
-			// console.error(service.methodList);
 
 			service.methodList.forEach(method => {
 				let outputType = method.outputType.substr(1);
@@ -35,7 +40,9 @@ protocPlugin(protos => {
 			serviceMessageImports = Object.keys(serviceMessageImports).map(symbol => {
 				return {
 					symbol: symbol,
-					path: "./" + symbol.toLowerCase() + "_pb",
+					// path: "./" + symbol.toLowerCase() + "_pb",
+					// path: protoImport,
+					path: "./_grpc-gen_web_out/",
 				}
 			});
 
@@ -59,7 +66,7 @@ protocPlugin(protos => {
 								`Promise<${outputType}>`,
 							returnTypeCtor: method.serverStreaming ?
 								`let next, error, done, ret = new Subject<${outputType}>(); next = v => ret.next(v); error = e => ret.error(e); done = v => ret.complete(v)` :
-								`let next, error, done = () => {}, ret = new Promise<${outputType}>((rs, rj) => {next = rs; error = rj})`,
+								`let next, error, done = v=>{}, ret = new Promise<${outputType}>((rs, rj) => {next = rs; error = rj})`,
 							outputType: outputType,
 							clientStreaming: method.clientStreaming,
 							serverStreaming: method.serverStreaming,
