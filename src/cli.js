@@ -65,7 +65,7 @@ protocPlugin((protos, opts) => {
 								`Observable<${outputType}>` :
 								`Promise<${outputType}>`,
 							returnTypeCtor: method.serverStreaming ?
-								`let next, error, done, ret = new Subject<${outputType}>(); next = v => ret.next(v); error = e => ret.error(e); done = v => ret.complete(v)` :
+								`let next, error, done, ret = new Subject<${outputType}>(); next = v => ret.next(v); error = e => ret.error(e); done = v => {ret.next(v);ret.complete();}` :
 								`let next, error, done = v=>{}, ret = new Promise<${outputType}>((rs, rj) => {next = rs; error = rj})`,
 							outputType: outputType,
 							clientStreaming: method.clientStreaming,
