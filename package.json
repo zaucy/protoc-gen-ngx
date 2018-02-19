@@ -4,8 +4,7 @@
   "bin": "src/cli.js",
   "description": "Angular service and message refs protoc plugin generator",
   "main": "src/main.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zaucy/protoc-gen-ngx.git"
