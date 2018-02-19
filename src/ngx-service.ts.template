@@ -5,32 +5,45 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { grpc, Code, Metadata } from "grpc-web-client";
 
+import {_protocGenNgxBaseService} from "./_protoc_gen_ngx/base-service";
+
 import { {{{import_symbol}}} as __service } from "{{{import_path}}}";
 {{#message_imports}}
 import { {{{symbol}}} } from "{{{path}}}";
 {{/message_imports}}
 
 @Injectable()
-export class {{name}} {
+export class {{name}} extends _protocGenNgxBaseService {
 
 	{{#methods}}
 	{{name}}(request: {{{inputType}}}): {{{returnType}}} {
 
 		{{{returnTypeCtor}}};
 
-		grpc.invoke(<any> __service.{{{name}}}, <any> {
-			request: request,
-			host: "https://" + location.hostname + ":8443",
-			onMessage: (response: {{{outputType}}}) => {
-				next(response);
-			},
-			onEnd: (code: Code, msg: undefined | string, metadata: Metadata) => {
-				if(code != Code.OK) {
-					error({code, msg, metadata});
-				} else {
-					done({code, msg, metadata});
+		let callbacks = {error, next, done};
+
+		this._handleInvoke<{{{rawInputType}}}, {{{rawOutputType}}}>(
+			__service.{{{name}}},
+			request,
+			callbacks,
+			{{{rawInputType}}},
+			{{{rawOutputType}}}
+		).catch(() => {
+			grpc.invoke(<any> __service.{{{name}}}, <any> {
+				request: request,
+				host: "https://" + location.hostname + ":8443",
+				metadata:
+				onMessage: (response: {{{outputType}}}) => {
+					callbacks.next(response);
+				},
+				onEnd: (code: Code, msg: undefined | string, metadata: Metadata) => {
+					if(code != Code.OK) {
+						callbacks.error({code, msg, metadata});
+					} else {
+						callbacks.done({code, msg, metadata});
+					}
 				}
-			}
+			});
 		});
 
 		return ret;

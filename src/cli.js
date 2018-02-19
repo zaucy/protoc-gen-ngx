@@ -12,7 +12,14 @@ protocPlugin((protos, opts) => {
 
 	const serviceTemplateSrc = fs.readFileSync(NGX_SERVICE_TEMPLATE, 'utf8');
 
-	return protos.reduce((files, proto) => {
+	let files = [];
+
+	files.push({
+		name: "_protoc_gen_ngx/base-service.ts",
+		content: fs.readFileSync(path.resolve(__dirname, "ngx-service-base.ts"))
+	});
+
+	protos.forEach(proto => {
 
 		let protoServiceImport = "./_grpc-gen_web_out/" +
 			path.basename(proto.name, ".proto") + "_pb_service";
@@ -58,6 +65,8 @@ protocPlugin((protos, opts) => {
 						let inputType = method.inputType.substr(1);
 						let methodDefinition = {
 							name: method.name,
+							rawInputType: inputType,
+							rawOutputType: outputType,
 							inputType: method.clientStreaming ?
 								`Observable<${inputType}>` :
 								`${inputType}`,
@@ -79,22 +88,7 @@ protocPlugin((protos, opts) => {
 				})
 			};
 		}));
+	});
 
-		// files = files.concat(proto.messageTypeList.map(messageType => {
-		// 	let messageFilename = messageType.name + '.ts';
-		// 	return {
-		// 		messageFilename
-		// 	};
-		// }));
-
-		// console.error(files.map(file => file.name));
-
-		return files;
-	}, []);
-
-	// console.error(protos[0].sourceCodeInfo.locationList.map(a => {
-	// 	return a;
-	// }));
-
-	return [];
+	return files;
 });
