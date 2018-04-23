@@ -19,8 +19,6 @@ protocPlugin((protos, opts) => {
 		let protoImport = "./_grpc-gen_web_out/" +
 			path.basename(proto.name, ".proto") + "_pb";
 
-		// console.log("protoImport:", protoImport);
-
 		files = files.concat(proto.serviceList.map(service => {
 
 			let serviceImportSymbol = service.name;
@@ -52,7 +50,8 @@ protocPlugin((protos, opts) => {
 					name: service.name,
 					message_imports: serviceMessageImports,
 					import_symbol: serviceImportSymbol,
-					import_path: serviceImportPath,
+					// import_path: serviceImportPath,
+					import_path: "./_grpc-gen_web_out/",
 					methods: service.methodList.map(method => {
 						let outputType = method.outputType.substr(1);
 						let inputType = method.inputType.substr(1);
