@@ -10,8 +10,25 @@ import { {{{import_symbol}}} as __service } from "{{{import_path}}}";
 import { {{{symbol}}} } from "{{{path}}}";
 {{/message_imports}}
 
+declare var DEFAULT_GRPC_NGX_HOST: string|undefined;
+declare var DEFAULT_GRPC_NGX_METADATA: Metadata|undefined;
+
+(<any>window).DEFAULT_GRPC_NGX_HOST = (<any>window).DEFAULT_GRPC_NGX_HOST || "";
+(<any>window).DEFAULT_GRPC_NGX_METADATA = (<any>window).DEFAULT_GRPC_NGX_METADATA || undefined;
+
 @Injectable()
 export class {{name}} {
+
+	private _host: string = '';
+	private _metadata: Metadata = null;
+
+	setHost(host: string) {
+		this._host = host;
+	}
+
+	setMetadata(metadata: Metadata) {
+		this._metadata = metadata;
+	}
 
 	{{#methods}}
 	{{name}}(request: {{{inputType}}}): {{{returnType}}} {
@@ -20,7 +37,8 @@ export class {{name}} {
 
 		grpc.invoke(<any> __service.{{{name}}}, <any> {
 			request: request,
-			host: "https://" + location.hostname + ":8443",
+			host: this._host || DEFAULT_GRPC_NGX_HOST || "",
+			metadata: this._metadata || DEFAULT_GRPC_NGX_METADATA || new Metadata(),
 			onMessage: (response: {{{outputType}}}) => {
 				next(response);
 			},
